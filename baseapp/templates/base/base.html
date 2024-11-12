@@ -1,23 +1,91 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
+    <title>AskMeFrolov</title>
+    <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="{% static './css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static './css/custom.css' %}">
 </head>
 
-<header class="p-3 bg-secondary text-white w-100">
-    <div class="flex">Hello, I`m header!</div>
+<body class="d-flex flex-column min-vh-100">
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">AskMeFrolov</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
+                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                    </form>
+                    <ul class="navbar-nav d-flex align-items-center">
+                        {% if True %}
+                        {% include "components/loginednavbar.html" %}
+                        {% else %}
+                        {% include "components/basenavbar.html" %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
 </header>
 
-<body>
-<p>Hello world! YEP</p>
-<!-- jQuery and Bootstrap Bundle (includes Popper) -->
+<main class="container mt-4">
+    <div class="row">
+        <div class="col-md-9">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="col-md-3">
+            <section class="mt-4">
+                <h2 class="h5">Popular Tags</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for tag in popular_tags %}
+                    <span class="badge rounded-pill text-bg-primary">
+                                <a class="text-decoration-none text-white" href="{% url 'app:tag' tag.id %}">
+                                    {{ tag.tag }}
+                                </a>
+                            </span>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="mt-4">
+                <h2 class="h5">Best Members</h2>
+                <div>
+                    <ul class="list-group list-group-flush">
+                        {% for user in popular_users %}
+                        <li class="list-group-item">{{ user.user_id.get_username }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer class="mt-auto bg-light py-3">
+    <div class="container text-center">
+        <p class="mb-0">© 2024 AskMeFrolov</p>
+    </div>
+</footer>
+
 <script src="{% static './js/jquery.min.js' %}"></script>
 <script src="{% static './js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
+</html>

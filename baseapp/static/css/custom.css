@@ -1,3 +1,61 @@
-.flexDiv {
-    color: Red
+.navbar {
+    min-height: 90px;
+}
+
+/* Стилизация Аватарки*/
+.profileAvatar {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+/* Основной фон страницы */
+body {
+    background-color: #f4f7fc;
+}
+
+/* Обновленный стиль для навигационного бара */
+.navbar-light {
+    background-color: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Стилизация ссылок на теги */
+.badge a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.badge a:hover {
+    text-decoration: underline;
+}
+
+/* Стилизация для блока с пользователями */
+.list-group-item {
+    background-color: #ffffff;
+    border: none;
+}
+
+.list-group-item:hover {
+    background-color: #f1f1f1;
+}
+
+/* Всплывающие эффекты */
+.navbar-toggler-icon {
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-toggler-icon:hover {
+    transform: rotate(90deg);
+}
+
+/* Стилизация футера */
+footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+footer p {
+    color: #6c757d;
+    margin: 0;
 }
