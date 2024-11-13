@@ -5,14 +5,11 @@ from django.contrib.auth.models import User
 from ... import models
 
 
-# Функция для генерации уникальных имен пользователей
-def generate_unique_username():
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
-
-
-# Функция для генерации email
-def generate_email(user_id):
-    return f'user_{user_id}@example.com'
+def generate_unique_username(existing_usernames):
+    while True:
+        username = ''.join(random.choices(string.ascii_lowercase + string.digits, k=8))
+        if username not in existing_usernames:
+            return username
 
 
 class Command(BaseCommand):
@@ -24,11 +21,18 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ratio = options['ratio']
 
+        # Удаляем существующие данные
+        models.Profile.objects.all().delete()
+        User.objects.all().delete()
+
         # Генерация пользователей и профилей
         users = []
+        existing_usernames = set()
+
         for i in range(ratio):
-            username = generate_unique_username()
-            email = generate_email(i)
+            username = generate_unique_username(existing_usernames)
+            existing_usernames.add(username)
+            email = f'user_{i}@example.com'
             password = 'password'
 
             user = User.objects.create_user(username=username, email=email, password=password)
