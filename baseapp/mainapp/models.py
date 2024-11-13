@@ -54,12 +54,12 @@ class Profile(models.Model):
     objects = ProfileManager()
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}'s profile"
 
 
 class Question(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')  # Профиль
     title = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

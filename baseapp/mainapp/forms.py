@@ -1,23 +1,17 @@
 from django import forms
 from .models import Question, Tag
 
+
 class QuestionForm(forms.ModelForm):
-    tags = forms.ModelMultipleChoiceField(
-        queryset=Tag.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True,
-    )
+    tags = forms.CharField(max_length=255, required=True,
+                           widget=forms.TextInput(attrs={'placeholder': 'Enter tags separated by commas'}))
 
     class Meta:
         model = Question
-        fields = ['title', 'content', 'tags']
-        widgets = {
-            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-        }
+        fields = ['title', 'content']
 
-    def clean_content(self):
-        content = self.cleaned_data.get('content')
-        if len(content) < 10:
-            raise forms.ValidationError("Content must be at least 10 characters long.")
-        return content
+    def save(self, commit=True):
+        question = super().save(commit=False)
+        if commit:
+            question.save()
+        return question

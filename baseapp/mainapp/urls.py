@@ -15,4 +15,9 @@ urlpatterns = [
     path('question/<int:id_question>/', views.question, name="question"),
     path('register/', views.register, name='register'),
     path('settings/', views.settings, name='settings'),
+    path('tag/<int:id_tag>/', views.tag, name='tag'),
 ]
+
+# Добавить поддержку медиа-файлов во время разработки
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

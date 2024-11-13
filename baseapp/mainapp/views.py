@@ -1,23 +1,58 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Profile, Question, Answer, Tag, QuestionLike, AnswerLike
-from .forms import QuestionForm
-from .models import Profile
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib import messages
 from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import QuestionForm
+from .models import Profile, Tag, Question
+
+
+@login_required
+def ask(request):
+    if not hasattr(request.user, 'profile'):
+        # Профиль не существует, создаем его
+        Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            tags_data = form.cleaned_data['tags']
+
+            # Сохраняем вопрос
+            question = form.save(commit=False)
+            question.user = request.user  # Устанавливаем user
+            question.profile = request.user.profile  # Устанавливаем профиль пользователя в поле profile
+            question.save()
+
+            # Сохраняем теги
+            tags = [tag.strip() for tag in tags_data.split(',')]
+            for tag_name in tags:
+                tag, created = Tag.objects.get_or_create(tag=tag_name)
+                question.tags.add(tag)
+
+            return redirect('home')  # Перенаправляем на страницу с вопросами
+
+    else:
+        form = QuestionForm()
+
+    return render(request, 'ask.html', {'form': form})
 
 
 def index(request):
-    popular_users = Profile.objects.popular_users()
+    popular_users = Profile.objects.popular_users()  # Получаем популярных пользователей
     questions = Question.objects.all()
+    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
 
     return render(request, 'index.html', {
-        'popular_users': popular_users,
+        'popular_users': popular_users,  # Добавляем популярных пользователей в контекст
         'questions': questions,
+        'popular_tags': popular_tags,  # Добавляем популярные теги
     })
 
 
@@ -116,31 +151,6 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     }
 
 
-@login_required
-def ask(request):
-    if request.method == "POST":
-        form = QuestionForm(request.POST)
-        if form.is_valid():
-            question = form.save(commit=False)
-            question.author = request.user
-            question.save()
-            form.save_m2m()
-            return redirect('index')
-
-    form = QuestionForm()
-
-    popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()
-
-    context = {
-        'form': form,
-        'popular_tags': popular_tags,
-        'popular_users': popular_users,
-    }
-
-    return render(request, 'ask.html', context)
-
-
 def question(request, id_question):
     try:
         question_item = Question.objects.get(id=id_question)
@@ -187,10 +197,12 @@ def tag(request, id_tag):
 
 def hot(request):
     popular_users = Profile.objects.popular_users()
+    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
 
-    return render(request, 'hot.html', {'popular_users': popular_users})
+    return render(request, 'hot.html', {'popular_users': popular_users, 'popular_tags': popular_tags})
 
 
 @login_required
 def settings(request):
-    return render(request, 'settings.html', {'user': request.user})
+    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
+    return render(request, 'settings.html', {'user': request.user, 'popular_tags': popular_tags})

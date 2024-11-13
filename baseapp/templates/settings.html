@@ -36,7 +36,12 @@
         <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
         <div class="col-sm-6">
             <div class="mb-2">
+                {% if user.profile.avatar %}
                 <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="img-thumbnail profilePictureSettings">
+                {% else %}
+                <img src="{% static 'img/avatar.png' %}" alt="Default Avatar"
+                     class="img-thumbnail profilePictureSettings">
+                {% endif %}
             </div>
             <input class="form-control" type="file" id="avatar" name="avatar"/>
         </div>
