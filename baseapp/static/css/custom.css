@@ -2,7 +2,6 @@
     min-height: 80px;
 }
 
-/* Стилизация Аватарки*/
 .profileAvatar {
     width: 60px;
     height: 60px;
@@ -15,18 +14,15 @@
     object-fit: cover;
 }
 
-/* Основной фон страницы */
 body {
     background-color: #f4f7fc;
 }
 
-/* Обновленный стиль для навигационного бара */
 .navbar-light {
     background-color: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Стилизация ссылок на теги */
 .badge a {
     color: #ffffff;
     text-decoration: none;
@@ -36,7 +32,6 @@ body {
     text-decoration: underline;
 }
 
-/* Стилизация для блока с пользователями */
 .list-group-item {
     background-color: #ffffff;
     border: none;
@@ -46,7 +41,6 @@ body {
     background-color: #f1f1f1;
 }
 
-/* Всплывающие эффекты */
 .navbar-toggler-icon {
     transition: transform 0.3s ease-in-out;
 }
@@ -55,7 +49,6 @@ body {
     transform: rotate(90deg);
 }
 
-/* Стилизация футера */
 footer {
     background-color: #f8f9fa;
     border-top: 1px solid #e9ecef;
@@ -66,37 +59,31 @@ footer p {
     margin: 0;
 }
 
-/* Для кнопок в навигации */
 .nav-item .btn {
     font-size: 1rem;
     padding: 0.5rem 1rem;
 }
 
-/* Для hover эффекта */
 .nav-item .btn:hover {
-    transform: scale(1.05); /* Немного увеличиваем размер при наведении */
+    transform: scale(1.05);
     transition: transform 0.3s ease;
 }
 
-/* Стиль для блоков с пользователями */
 .nav-item .d-flex {
     align-items: center;
 }
 
-/* Увеличиваем размер шрифта для имени пользователя */
 .nav-item .fw-bold {
     font-size: 1.1rem;
 }
 
-/* Стиль для маленьких кнопок */
 .nav-item .btn-sm {
     padding: 0.3rem 0.6rem;
     font-size: 0.9rem;
 }
 
-/* Кнопки "Exit" и "Settings" */
 .nav-item .btn-outline-danger {
-    color: #dc3545; /* Красный цвет */
+    color: #dc3545;
     border-color: #dc3545;
 }
 
@@ -110,35 +97,31 @@ footer p {
     color: white;
 }
 
-/* Стиль для пагинации с округлыми углами */
 .pagination-rounded .page-item {
-    margin: 0 5px; /* Отступы между кнопками */
+    margin: 0 5px;
 }
 
 .pagination-rounded .page-link {
-    border-radius: 50px; /* Округлые углы */
-    padding: 0.5rem 1rem; /* Размер кнопки */
-    font-size: 1rem; /* Размер шрифта */
-    color: #007bff; /* Цвет текста */
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #007bff;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Цвет при наведении на ссылку */
 .pagination-rounded .page-link:hover {
     background-color: #007bff;
-    color: white; /* Текст белого цвета при наведении */
+    color: white;
 }
 
-/* Цвет активной страницы */
 .pagination-rounded .page-item.active .page-link {
     background-color: #007bff;
-    color: white; /* Белый цвет текста */
+    color: white;
     border-color: #007bff;
 }
 
-/* Стили для неактивных элементов */
 .pagination-rounded .page-item.disabled .page-link {
-    color: #6c757d; /* Серый цвет */
+    color: #6c757d;
     background-color: transparent;
     border-color: #6c757d;
 }
@@ -148,35 +131,31 @@ footer p {
     color: #007bff;
 }
 
-/* Стили для голосования */
 .vote-icon {
-    font-size: 1.5rem; /* Увеличиваем размер иконок */
-    transition: transform 0.2s ease; /* Плавная анимация при наведении */
+    font-size: 1.5rem;
+    transition: transform 0.2s ease;
 }
 
 .vote-icon:hover {
-    transform: scale(1.2); /* Увеличение иконки при наведении */
+    transform: scale(1.2);
 }
 
-/* Картинка профиля */
 .profilePictureQuestion {
-    border-radius: 50%; /* Делаем изображение круглым */
+    border-radius: 50%;
 }
 
-/* Стиль для текста с длинными описаниями */
 .cardoverflow {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
     display: block;
-    height: 50px; /* Устанавливаем максимальную высоту */
+    height: 50px;
 }
 
-/* Мобильная адаптивность */
 @media (max-width: 768px) {
     .card-body {
-        padding: 1rem; /* Снижаем отступы на мобильных */
+        padding: 1rem;
     }
 }
 
@@ -189,52 +168,47 @@ footer p {
     transform: scale(1.05);
 }
 
-/* Стиль для блока с никнеймом */
 .profile-username {
-    margin-bottom: 7px; /* Уменьшаем отступ, чтобы не было слишком много пустого пространства */
-    line-height: 1.25; /* Чтобы текст в строке был чуть выше и более сбалансирован */
+    margin-bottom: 7px;
+    line-height: 1.25;
 }
 
-/* Выравнивание и отступы для блока с кнопками */
 .profile-buttons {
     align-items: center;
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
-    margin-left: 20px; /* Добавляем отступ между ником и кнопками */
+    margin-left: 20px;
 }
 
-/* Выравнивание аватара, никнейма и кнопок по вертикали */
 .nav-item .d-flex {
-    align-items: center; /* Центрируем все элементы по вертикали */
+    align-items: center;
 }
 
-/* Дополнительное выравнивание никнейма относительно остальной части навбара */
 .profile-username, .profile-buttons {
     display: flex;
     align-items: center;
 }
 
 .blue-text {
-    color: #007bff; /* стандартный синий оттенок */
+    color: #007bff;
 }
 
-/* Можно использовать градиенты или другие оттенки синего */
 .blue-text-light {
-    color: #4fa3f7; /* светлый оттенок синего */
+    color: #4fa3f7;
 }
 
 .blue-text-dark {
-    color: #003366; /* темный синий */
+    color: #003366;
 }
 
 .blue-text:hover {
-    color: #0056b3; /* темный синий при наведении */
-    text-decoration: underline; /* подчеркивание при наведении */
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 .list-group-item {
     display: flex;
-    justify-content: space-between; /* Это гарантирует, что элементы будут по бокам */
+    justify-content: space-between;
     align-items: center;
 }

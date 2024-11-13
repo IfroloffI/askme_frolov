@@ -15,7 +15,6 @@ from .models import Profile, Tag, Question
 @login_required
 def ask(request):
     if not hasattr(request.user, 'profile'):
-        # Профиль не существует, создаем его
         Profile.objects.create(user=request.user)
 
     if request.method == 'POST':
@@ -25,19 +24,17 @@ def ask(request):
             content = form.cleaned_data['content']
             tags_data = form.cleaned_data['tags']
 
-            # Сохраняем вопрос
             question = form.save(commit=False)
-            question.user = request.user  # Устанавливаем user
-            question.profile = request.user.profile  # Устанавливаем профиль пользователя в поле profile
+            question.user = request.user
+            question.profile = request.user.profile
             question.save()
 
-            # Сохраняем теги
             tags = [tag.strip() for tag in tags_data.split(',')]
             for tag_name in tags:
                 tag, created = Tag.objects.get_or_create(tag=tag_name)
                 question.tags.add(tag)
 
-            return redirect('home')  # Перенаправляем на страницу с вопросами
+            return redirect('home')
 
     else:
         form = QuestionForm()
@@ -47,24 +44,23 @@ def ask(request):
 
 def index(request):
     questions = Question.objects.all()
-    paginator = Paginator(questions, 10)  # Разбиваем на страницы, по 10 вопросов на каждой
-    page_number = request.GET.get('page')  # Получаем номер страницы из запроса
-    page_obj = paginator.get_page(page_number)  # Получаем объект страницы
-    popular_users = Profile.objects.popular_users()  # Получаем популярных пользователей
-    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
+    paginator = Paginator(questions, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    popular_users = Profile.objects.popular_users()
+    popular_tags = Tag.objects.popular_tags()
 
     return render(request, 'index.html', {
-        'popular_users': popular_users,  # Добавляем популярных пользователей в контекст
-        'popular_tags': popular_tags,  # Добавляем популярные теги
-        'content': page_obj  # Передаем только page_obj
+        'popular_users': popular_users,
+        'popular_tags': popular_tags,
+        'content': page_obj
     })
 
 
 def register(request):
     if request.method == 'POST':
-        print("Post request received")  # Проверим, пришел ли POST запрос
+        print("Post request received")
 
-        # Получаем данные из формы
         username = request.POST.get('login')
         email = request.POST.get('email')
         nickname = request.POST.get('nickname')
@@ -72,16 +68,11 @@ def register(request):
         confirm_password = request.POST.get('confirm-password')
         avatar = request.FILES.get('avatar')
 
-        # Проверим, что данные пришли правильно
-        print(f"Username: {username}, Email: {email}, Nickname: {nickname}")
-
-        # Валидация: проверка совпадения паролей
         if password != confirm_password:
             print("Passwords do not match")
             messages.error(request, "Passwords do not match.")
             return redirect('register')
 
-        # Валидация: проверка, существует ли уже пользователь с таким логином или email
         if User.objects.filter(username=username).exists():
             print("Username already exists")
             messages.error(request, "Username already exists.")
@@ -92,7 +83,6 @@ def register(request):
             messages.error(request, "Email already exists.")
             return redirect('register')
 
-        # Валидация: проверка на корректность email
         try:
             validate_email = EmailValidator()
             validate_email(email)
@@ -101,24 +91,14 @@ def register(request):
             messages.error(request, "Invalid email address.")
             return redirect('register')
 
-        print("I`m here!")  # Убедитесь, что эта строка выводится в консоль
-
-        # Создание нового пользователя
         try:
             user = User.objects.create_user(username=username, email=email, password=password)
             print(f"User {username} created successfully")
 
-            # Если у вас есть дополнительная информация (например, nickname, avatar), сохраняем их
-            # Пример для профиля пользователя:
-            # profile = Profile(user=user, nickname=nickname, avatar=avatar)
-            # profile.save()
-
-            # Автоматический вход после регистрации
             login(request, user)
             print(f"User {username} logged in successfully")
 
-            # Перенаправление на главную страницу или на страницу профиля
-            return redirect('home')  # или другую нужную страницу
+            return redirect('home')
 
         except Exception as e:
             print(f"Error during user creation: {str(e)}")
@@ -201,9 +181,9 @@ def tag(request, id_tag):
 
 def hot(request):
     popular_users = Profile.objects.popular_users()
-    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
-    questions = Question.objects.hot()  # Получаем горячие вопросы
-    content = paginate(questions, request)  # Пагинируем вопросы
+    popular_tags = Tag.objects.popular_tags()
+    questions = Question.objects.hot()
+    content = paginate(questions, request)
 
     return render(request, 'hot.html',
                   {'popular_users': popular_users, 'popular_tags': popular_tags, 'content': content})
@@ -211,30 +191,23 @@ def hot(request):
 
 @login_required
 def settings(request):
-    # Получаем популярные теги
     popular_tags = Tag.objects.popular_tags()
 
     if request.method == 'POST':
-        # Получаем профиль текущего пользователя
         profile = request.user.profile
 
-        # Обрабатываем поле nickname
         nickname = request.POST.get('nickname')
 
         if not nickname:
-            # Если nickname пустое, добавляем ошибку
             messages.error(request, 'Nickname cannot be empty.')
             return render(request, 'settings.html',
                           {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname})
 
-        # Если nickname не пустое, сохраняем его
         profile.nickname = nickname
 
-        # Обрабатываем аватарку
         if request.FILES.get('avatar'):
             profile.avatar = request.FILES['avatar']
 
-        # Сохраняем изменения в профиле
         try:
             profile.save()
             messages.success(request, 'Profile updated successfully.')
@@ -244,7 +217,6 @@ def settings(request):
                           {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname,
                            'avatar': profile.avatar})
 
-        # После сохранения редиректим на страницу настроек
         return redirect('settings')
 
     return render(request, 'settings.html',
