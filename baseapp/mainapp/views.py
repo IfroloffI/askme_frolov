@@ -208,8 +208,45 @@ def hot(request):
 
 @login_required
 def settings(request):
-    popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
-    return render(request, 'settings.html', {'user': request.user, 'popular_tags': popular_tags})
+    # Получаем популярные теги
+    popular_tags = Tag.objects.popular_tags()
+
+    if request.method == 'POST':
+        # Получаем профиль текущего пользователя
+        profile = request.user.profile
+
+        # Обрабатываем поле nickname
+        nickname = request.POST.get('nickname')
+
+        if not nickname:
+            # Если nickname пустое, добавляем ошибку
+            messages.error(request, 'Nickname cannot be empty.')
+            return render(request, 'settings.html',
+                          {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname})
+
+        # Если nickname не пустое, сохраняем его
+        profile.nickname = nickname
+
+        # Обрабатываем аватарку
+        if request.FILES.get('avatar'):
+            profile.avatar = request.FILES['avatar']
+
+        # Сохраняем изменения в профиле
+        try:
+            profile.save()
+            messages.success(request, 'Profile updated successfully.')
+        except ValidationError as e:
+            messages.error(request, f'Error: {e}')
+            return render(request, 'settings.html',
+                          {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname,
+                           'avatar': profile.avatar})
+
+        # После сохранения редиректим на страницу настроек
+        return redirect('settings')
+
+    return render(request, 'settings.html',
+                  {'user': request.user, 'popular_tags': popular_tags, 'nickname': request.user.profile.nickname,
+                   'avatar': request.user.profile.avatar})
 
 
 def logout_view(request):

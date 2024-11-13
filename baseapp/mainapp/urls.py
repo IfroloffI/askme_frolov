@@ -18,6 +18,5 @@ urlpatterns = [
     path('tag/<int:id_tag>/', views.tag, name='tag'),
 ]
 
-# Добавить поддержку медиа-файлов во время разработки
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

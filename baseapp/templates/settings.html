@@ -9,6 +9,15 @@
 
 {% include "components/error.html" %}
 
+<!-- Выводим сообщения об успехе или ошибке -->
+{% if messages %}
+<div class="alert alert-info" role="alert">
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row mb-3">
@@ -28,7 +37,7 @@
     <div class="row mb-3">
         <label for="nickname" class="col-sm-2 col-form-label">Nickname</label>
         <div class="col-sm-6">
-            <input type="text" id="nickname" class="form-control" value="{{ user.profile.nickname }}" required/>
+            <input type="text" id="nickname" class="form-control" value="{{ nickname }}" name="nickname" required/>
         </div>
     </div>
 
@@ -36,12 +45,10 @@
         <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
         <div class="col-sm-6">
             <div class="mb-2">
-                {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="Avatar"
-                     class="img-thumbnail profileAvatarBig">
+                {% if avatar %}
+                <img src="{{ avatar.url }}" alt="Avatar" class="img-thumbnail profileAvatarBig">
                 {% else %}
-                <img src="../static/img/avatar.png" alt="Default Avatar"
-                     class="img-thumbnail profileAvatarBig">
+                <img src="../static/img/avatar.png" alt="Default Avatar" class="img-thumbnail profileAvatarBig">
                 {% endif %}
             </div>
             <input class="form-control" type="file" id="avatar" name="avatar"/>

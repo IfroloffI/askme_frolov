@@ -3,8 +3,13 @@
         <div class="row">
             <div class="col-auto d-flex align-items-start">
                 <div class="d-flex flex-column align-items-center">
-                    <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2"
+                    {% if question.profile.avatar %}
+                    <img src="{{ question.profile.avatar.url }}" alt="Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                    {% else %}
+                    <img src="../static/img/avatar.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2"
                          style="width: 60px; height: 60px;">
+                    {% endif %}
                     <div class="d-flex align-items-center bg-light rounded p-2">
                         <button class="btn btn-outline-success p-0 me-2" aria-label="Upvote">
                             <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
