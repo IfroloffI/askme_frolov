@@ -202,8 +202,11 @@ def tag(request, id_tag):
 def hot(request):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
+    questions = Question.objects.hot()  # Получаем горячие вопросы
+    content = paginate(questions, request)  # Пагинируем вопросы
 
-    return render(request, 'hot.html', {'popular_users': popular_users, 'popular_tags': popular_tags})
+    return render(request, 'hot.html',
+                  {'popular_users': popular_users, 'popular_tags': popular_tags, 'content': content})
 
 
 @login_required

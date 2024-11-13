@@ -31,7 +31,7 @@ Question
             <strong>Tags:</strong>
             {% for tag in question.tags.all %}
             <span class="badge rounded-pill text-bg-primary">
-                <a class="text-decoration-none text-reset" href="{% url 'app:tag' tag.id %}">
+                <a class="text-decoration-none text-reset" href="{% url 'tag' tag.id %}">
                     {{ tag.tag }}
                 </a>
             </span>
