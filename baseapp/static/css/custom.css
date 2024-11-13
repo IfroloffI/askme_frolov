@@ -1,5 +1,5 @@
 .navbar {
-    min-height: 90px;
+    min-height: 80px;
 }
 
 /* Стилизация Аватарки*/
@@ -59,3 +59,127 @@ footer p {
     color: #6c757d;
     margin: 0;
 }
+
+/* Для кнопок в навигации */
+.nav-item .btn {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+/* Для hover эффекта */
+.nav-item .btn:hover {
+    transform: scale(1.05); /* Немного увеличиваем размер при наведении */
+    transition: transform 0.3s ease;
+}
+
+/* Стиль для блоков с пользователями */
+.nav-item .d-flex {
+    align-items: center;
+}
+
+/* Увеличиваем размер шрифта для имени пользователя */
+.nav-item .fw-bold {
+    font-size: 1.1rem;
+}
+
+/* Стиль для маленьких кнопок */
+.nav-item .btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+}
+
+/* Кнопки "Exit" и "Settings" */
+.nav-item .btn-outline-danger {
+    color: #dc3545; /* Красный цвет */
+    border-color: #dc3545;
+}
+
+.nav-item .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.nav-item .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Стиль для пагинации с округлыми углами */
+.pagination-rounded .page-item {
+    margin: 0 5px; /* Отступы между кнопками */
+}
+
+.pagination-rounded .page-link {
+    border-radius: 50px; /* Округлые углы */
+    padding: 0.5rem 1rem; /* Размер кнопки */
+    font-size: 1rem; /* Размер шрифта */
+    color: #007bff; /* Цвет текста */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Цвет при наведении на ссылку */
+.pagination-rounded .page-link:hover {
+    background-color: #007bff;
+    color: white; /* Текст белого цвета при наведении */
+}
+
+/* Цвет активной страницы */
+.pagination-rounded .page-item.active .page-link {
+    background-color: #007bff;
+    color: white; /* Белый цвет текста */
+    border-color: #007bff;
+}
+
+/* Стили для неактивных элементов */
+.pagination-rounded .page-item.disabled .page-link {
+    color: #6c757d; /* Серый цвет */
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.pagination-rounded .page-item:hover:not(.active) .page-link {
+    background-color: #e9ecef;
+    color: #007bff;
+}
+
+/* Стили для голосования */
+.vote-icon {
+    font-size: 1.5rem; /* Увеличиваем размер иконок */
+    transition: transform 0.2s ease; /* Плавная анимация при наведении */
+}
+
+.vote-icon:hover {
+    transform: scale(1.2); /* Увеличение иконки при наведении */
+}
+
+/* Картинка профиля */
+.profilePictureQuestion {
+    border-radius: 50%; /* Делаем изображение круглым */
+}
+
+/* Стиль для текста с длинными описаниями */
+.cardoverflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    display: block;
+    height: 50px; /* Устанавливаем максимальную высоту */
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem; /* Снижаем отступы на мобильных */
+    }
+}
+
+.btn-primary {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+

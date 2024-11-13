@@ -1,0 +1,52 @@
+{% extends "base/base.html" %}
+
+{% block title %}Settings{% endblock title %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center mb-4">
+    <h1>Settings: {{ user.username }}</h1>
+</div>
+
+{% include "components/error.html" %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <label for="login" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-6">
+            <input type="text" id="login" class="form-control" value="{{ user.username }}" disabled/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-6">
+            <input type="email" id="email" class="form-control" value="{{ user.email }}" disabled/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="nickname" class="col-sm-2 col-form-label">Nickname</label>
+        <div class="col-sm-6">
+            <input type="text" id="nickname" class="form-control" value="{{ user.profile.nickname }}" required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="avatar" class="col-sm-2 col-form-label">Avatar</label>
+        <div class="col-sm-6">
+            <div class="mb-2">
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="img-thumbnail profilePictureSettings">
+            </div>
+            <input class="form-control" type="file" id="avatar" name="avatar"/>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-2"></div>
+        <div class="col-10">
+            <button type="submit" class="btn btn-primary w-100">Update Profile</button>
+        </div>
+    </div>
+</form>
+{% endblock content %}

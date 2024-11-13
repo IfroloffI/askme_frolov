@@ -1,0 +1,70 @@
+{% extends "./base/base.html" %}
+
+{% block title %}
+Register
+{% endblock title %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center mb-4">
+    <h1>Registration</h1>
+</div>
+
+{% include "components/error.html" %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <label for="login" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-6">
+            <input type="text" id="login" name="login" class="form-control" placeholder="Enter your login here"
+                   required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="email" class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-6">
+            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email here"
+                   required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="nickname" class="col-sm-2 col-form-label">Nickname</label>
+        <div class="col-sm-6">
+            <input type="text" id="nickname" name="nickname" class="form-control" placeholder="Enter your nickname here"
+                   required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-6">
+            <input type="password" id="password" name="password" class="form-control"
+                   placeholder="Enter your password here" required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="confirm-password" class="col-sm-2 col-form-label">Repeat Password</label>
+        <div class="col-sm-6">
+            <input type="password" id="confirm-password" name="confirm-password" class="form-control"
+                   placeholder="Confirm your password here" required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="avatar" class="col-sm-2 col-form-label">Upload Avatar</label>
+        <div class="col-sm-6">
+            <input class="form-control" type="file" id="avatar" name="avatar"/>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-2"></div>
+        <div class="col-10">
+            <button type="submit" class="btn btn-primary w-100">Register</button>
+        </div>
+    </div>
+</form>
+
+{% endblock content %}

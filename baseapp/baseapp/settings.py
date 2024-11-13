@@ -48,6 +48,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+LOGIN_REDIRECT_URL = '/ask/'
+
 ROOT_URLCONF = "baseapp.urls"
 
 TEMPLATES = [
@@ -110,6 +112,10 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Хранение сессий в базе данных
+SESSION_COOKIE_AGE = 3600  # Время жизни сессии (1 час)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # Сессия заканчивается при закрытии браузера
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
