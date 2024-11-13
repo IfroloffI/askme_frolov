@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-j6bkt62(u91__)xyk^0s6wq01zmz=hd16%t3d9rxix%@wsbzgk
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -42,7 +42,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -85,7 +85,7 @@ DATABASES = {
         'NAME': 'db',
         'USER': 'postgres',
         'PASSWORD': '123456',
-        'HOST': '192.168.43.89',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
