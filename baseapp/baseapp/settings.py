@@ -49,7 +49,7 @@ MIDDLEWARE = [
 ]
 
 LOGIN_REDIRECT_URL = '/ask/'
-
+LOGOUT_REDIRECT_URL = '/'
 ROOT_URLCONF = "baseapp.urls"
 
 TEMPLATES = [

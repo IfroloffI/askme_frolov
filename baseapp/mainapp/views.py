@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import QuestionForm
+from django.contrib.auth import logout
 from .models import Profile, Tag, Question
 
 
@@ -45,14 +46,17 @@ def ask(request):
 
 
 def index(request):
-    popular_users = Profile.objects.popular_users()  # Получаем популярных пользователей
     questions = Question.objects.all()
+    paginator = Paginator(questions, 10)  # Разбиваем на страницы, по 10 вопросов на каждой
+    page_number = request.GET.get('page')  # Получаем номер страницы из запроса
+    page_obj = paginator.get_page(page_number)  # Получаем объект страницы
+    popular_users = Profile.objects.popular_users()  # Получаем популярных пользователей
     popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
 
     return render(request, 'index.html', {
         'popular_users': popular_users,  # Добавляем популярных пользователей в контекст
-        'questions': questions,
         'popular_tags': popular_tags,  # Добавляем популярные теги
+        'content': page_obj  # Передаем только page_obj
     })
 
 
@@ -206,3 +210,8 @@ def hot(request):
 def settings(request):
     popular_tags = Tag.objects.popular_tags()  # Получаем популярные теги
     return render(request, 'settings.html', {'user': request.user, 'popular_tags': popular_tags})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')

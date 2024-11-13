@@ -11,7 +11,7 @@ Index Page
 </div>
 
 <div class="d-flex flex-column gap-3">
-    {% for question in content.page_items.object_list %}
+    {% for question in content.object_list %}
     {% include "components/questioncard.html" %}
     {% endfor %}
 </div>

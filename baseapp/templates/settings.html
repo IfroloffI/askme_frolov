@@ -37,10 +37,11 @@
         <div class="col-sm-6">
             <div class="mb-2">
                 {% if user.profile.avatar %}
-                <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="img-thumbnail profilePictureSettings">
+                <img src="{{ user.profile.avatar.url }}" alt="Avatar"
+                     class="img-thumbnail profileAvatarBig">
                 {% else %}
-                <img src="{% static 'img/avatar.png' %}" alt="Default Avatar"
-                     class="img-thumbnail profilePictureSettings">
+                <img src="../static/img/avatar.png" alt="Default Avatar"
+                     class="img-thumbnail profileAvatarBig">
                 {% endif %}
             </div>
             <input class="form-control" type="file" id="avatar" name="avatar"/>

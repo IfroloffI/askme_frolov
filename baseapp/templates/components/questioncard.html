@@ -3,7 +3,8 @@
         <div class="row">
             <div class="col-auto d-flex align-items-start">
                 <div class="d-flex flex-column align-items-center">
-                    <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                    <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2"
+                         style="width: 60px; height: 60px;">
                     <div class="d-flex align-items-center bg-light rounded p-2">
                         <button class="btn btn-outline-success p-0 me-2" aria-label="Upvote">
                             <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
@@ -17,7 +18,7 @@
             </div>
             <div class="col">
                 <h5 class="card-title">
-                    <a class="text-decoration-none text-reset" href="{% url 'app:question' question.id %}">
+                    <a class="text-decoration-none text-reset" href="{% url 'question' question.id %}">
                         {{ question.title }}
                     </a>
                 </h5>
@@ -27,14 +28,14 @@
                     </p>
                 </div>
                 <div class="d-flex gap-5">
-                    <a href="{% url 'app:question' question.id %}#end" class="card-link btn btn-outline-primary">
+                    <a href="{% url 'question' question.id %}#end" class="card-link btn btn-outline-primary">
                         Answer ({{ question.answer_count }})
                     </a>
                     <div>
                         <span>Tags:</span>
                         {% for tag in question.tags.all %}
                         <span class="badge rounded-pill text-bg-primary">
-                            <a class="text-decoration-none text-reset" href="{% url 'app:tag' tag.id %}">
+                            <a class="text-decoration-none text-reset" href="{% url 'tag' tag.id %}">
                                 {{ tag.tag }}
                             </a>
                         </span>

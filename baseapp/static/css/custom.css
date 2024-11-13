@@ -9,6 +9,12 @@
     object-fit: cover;
 }
 
+.profileAvatarBig {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
 /* Основной фон страницы */
 body {
     background-color: #f4f7fc;
