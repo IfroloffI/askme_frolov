@@ -77,11 +77,6 @@ footer p {
     font-size: 1.1rem;
 }
 
-.nav-item .btn-sm {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.9rem;
-}
-
 .nav-item .btn-outline-danger {
     color: #dc3545;
     border-color: #dc3545;
@@ -178,7 +173,7 @@ footer p {
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 .nav-item .d-flex {

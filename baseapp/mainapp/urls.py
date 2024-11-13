@@ -3,13 +3,14 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import CustomLoginView
 
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('', views.index, name="index"),
+    path('', views.index, name='index'),
+    path('', views.index, name="home"),
     path('ask/', views.ask, name="ask"),
     path('hot/', views.hot, name="hot"),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('register/', views.register, name='register'),
     path('logout/', views.logout_view, name='logout'),
     path('question/<int:id_question>/', views.question, name="question"),

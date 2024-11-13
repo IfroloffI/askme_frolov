@@ -10,10 +10,28 @@ from django.contrib import messages
 from .forms import QuestionForm
 from django.contrib.auth import logout
 from .models import Profile, Tag, Question
+from django.contrib.auth.views import LoginView
+
+
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        popular_users = Profile.objects.popular_users()
+        popular_tags = Tag.objects.popular_tags()
+
+        context['popular_users'] = popular_users
+        context['popular_tags'] = popular_tags
+
+        return context
 
 
 @login_required
 def ask(request):
+    popular_users = Profile.objects.popular_users()
+    popular_tags = Tag.objects.popular_tags()
+
     if not hasattr(request.user, 'profile'):
         Profile.objects.create(user=request.user)
 
@@ -39,7 +57,9 @@ def ask(request):
     else:
         form = QuestionForm()
 
-    return render(request, 'ask.html', {'form': form})
+    return render(request, 'ask.html', {'popular_users': popular_users,
+                                        'popular_tags': popular_tags,
+                                        'form': form})
 
 
 def index(request):
@@ -58,6 +78,9 @@ def index(request):
 
 
 def register(request):
+    popular_users = Profile.objects.popular_users()
+    popular_tags = Tag.objects.popular_tags()
+
     if request.method == 'POST':
         print("Post request received")
 
@@ -106,7 +129,10 @@ def register(request):
             return redirect('register')
 
     print("GET request or no POST data")
-    return render(request, 'register.html')
+    return render(request, 'register.html', {
+        'popular_users': popular_users,
+        'popular_tags': popular_tags
+    })
 
 
 def paginate(objects_list, request, per_page=3, adjacent_pages=2):
@@ -191,17 +217,19 @@ def hot(request):
 
 @login_required
 def settings(request):
+    popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
     if request.method == 'POST':
         profile = request.user.profile
-
         nickname = request.POST.get('nickname')
 
         if not nickname:
             messages.error(request, 'Nickname cannot be empty.')
             return render(request, 'settings.html',
-                          {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname})
+                          {'user': request.user, 'popular_tags': popular_tags,
+                           'popular_users': popular_users,
+                           'nickname': profile.nickname})
 
         profile.nickname = nickname
 
@@ -211,16 +239,19 @@ def settings(request):
         try:
             profile.save()
             messages.success(request, 'Profile updated successfully.')
+            return redirect('settings')
         except ValidationError as e:
             messages.error(request, f'Error: {e}')
             return render(request, 'settings.html',
-                          {'user': request.user, 'popular_tags': popular_tags, 'nickname': profile.nickname,
+                          {'user': request.user, 'popular_tags': popular_tags,
+                           'popular_users': popular_users,
+                           'nickname': profile.nickname,
                            'avatar': profile.avatar})
 
-        return redirect('settings')
-
     return render(request, 'settings.html',
-                  {'user': request.user, 'popular_tags': popular_tags, 'nickname': request.user.profile.nickname,
+                  {'user': request.user, 'popular_tags': popular_tags,
+                   'popular_users': popular_users,
+                   'nickname': request.user.profile.nickname,
                    'avatar': request.user.profile.avatar})
 
 

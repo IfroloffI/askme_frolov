@@ -21,13 +21,16 @@ class TagManager(models.Manager):
 
 class ProfileManager(models.Manager):
     def popular_users(self):
-        return self.annotate(
+        profiles = self.annotate(
             question_count=Count('question'),
             answer_count=Count('answer')
         ).order_by('-question_count', '-answer_count')[:5]
 
+        print("Popular users:", profiles)
+
+        return profiles
+
     def get_user_profile(self, user):
-        """Метод для получения профиля по пользователю"""
         return self.get(user=user)
 
 
@@ -54,7 +57,7 @@ class Profile(models.Model):
     objects = ProfileManager()
 
     def __str__(self):
-        return f"{self.user.username}'s profile"
+        return f"{self.user.username}"
 
 
 class Question(models.Model):

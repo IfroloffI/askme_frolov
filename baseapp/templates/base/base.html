@@ -68,14 +68,23 @@
                 <h2 class="h5">Best Members</h2>
                 <div>
                     <ul class="list-group list-group-flush">
-                        {% for user in popular_users %}
+                        {% if popular_users %}
+                        {% for profile in popular_users %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span class="blue-text">{{ user.username }}</span>
+                            {% if profile.user.username %}
+                            <span class="blue-text">{{ profile.user.username }}</span>
+                            {% else %}
+                            <span class="blue-text">Username not available</span>
+                            {% endif %}
                         </li>
                         {% endfor %}
+                        {% else %}
+                        <li class="list-group-item">No popular members found.</li>
+                        {% endif %}
                     </ul>
                 </div>
             </section>
+
 
         </div>
     </div>
