@@ -1,18 +1,18 @@
 <li class="nav-item me-2">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center w-100">
         {% if user.profile.avatar %}
-        <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle profileAvatar me-2"
-             style="width: 40px; height: 40px;">
+        <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle profileAvatar me-2">
         {% else %}
-        <img src="../static/img/avatar.png" alt="Avatar" class="rounded-circle profileAvatar me-2"
-             style="width: 40px; height: 40px;">
+        <img src="../static/img/avatar.png" alt="Avatar" class="rounded-circle profileAvatar me-2">
         {% endif %}
-        <div class="d-flex flex-column">
+
+        <div class="d-flex flex-column me-auto profile-username">
             <div class="fw-bold">{{ user.username }}</div>
-            <div class="d-flex gap-2">
-                <a href="{% url 'settings' %}" class="btn btn-outline-secondary btn-sm">Settings</a>
-                <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Exit</a>
-            </div>
+        </div>
+
+        <div class="d-flex flex-row align-items-center gap-3 profile-buttons">
+            <a href="{% url 'settings' %}" class="btn btn-outline-secondary btn-sm">Settings</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Exit</a>
         </div>
     </div>
 </li>

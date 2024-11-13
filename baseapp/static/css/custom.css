@@ -189,3 +189,29 @@ footer p {
     transform: scale(1.05);
 }
 
+/* Стиль для блока с никнеймом */
+.profile-username {
+    margin-bottom: 7px; /* Уменьшаем отступ, чтобы не было слишком много пустого пространства */
+    line-height: 1.25; /* Чтобы текст в строке был чуть выше и более сбалансирован */
+}
+
+/* Выравнивание и отступы для блока с кнопками */
+.profile-buttons {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+    margin-left: 20px; /* Добавляем отступ между ником и кнопками */
+}
+
+/* Выравнивание аватара, никнейма и кнопок по вертикали */
+.nav-item .d-flex {
+    align-items: center; /* Центрируем все элементы по вертикали */
+}
+
+/* Дополнительное выравнивание никнейма относительно остальной части навбара */
+.profile-username, .profile-buttons {
+    display: flex;
+    align-items: center;
+}
+

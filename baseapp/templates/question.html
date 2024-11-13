@@ -8,7 +8,7 @@ Question
 <div class="row mb-4">
     <div class="col-auto d-flex align-items-start">
         <div class="d-flex flex-column align-items-center">
-            <img src="../static/img/pfp.jpg" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
+            <img src="../static/img/avatar.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
             <div class="d-flex align-items-center bg-light rounded p-2">
                 <button class="btn btn-link p-0">
                     <i class="bi bi-caret-up-fill vote-icon"></i>
@@ -44,7 +44,7 @@ Question
 
 <div class="d-flex flex-column gap-3">
     {% for answer in content.page_items.object_list %}
-        {% include "components/answer.html" %}
+    {% include "components/answer.html" %}
     {% endfor %}
 </div>
 
@@ -53,7 +53,8 @@ Question
 <hr>
 
 <div class="form-group">
-    <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="5" placeholder="Write your answer here..."></textarea>
+    <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="5"
+              placeholder="Write your answer here..."></textarea>
     <button type="button" class="btn btn-primary w-100">Answer</button>
 </div>
 
