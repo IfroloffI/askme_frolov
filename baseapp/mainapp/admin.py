@@ -9,3 +9,7 @@ admin.site.register(Tag)
 admin.site.register(Profile)
 admin.site.register(QuestionLike)
 admin.site.register(AnswerLike)
+
+# Пагинация ответов
+# Кнопка правильного ответа correct
+# в index views юзать пагинацию самописную

@@ -51,6 +51,9 @@ MIDDLEWARE = [
 LOGIN_REDIRECT_URL = '/ask/'
 LOGOUT_REDIRECT_URL = '/'
 ROOT_URLCONF = "baseapp.urls"
+# CSRF_TRUSTED_ORIGINS = [
+#    'https://6fd7-194-186-220-179.ngrok-free.app',
+# ]
 
 TEMPLATES = [
     {

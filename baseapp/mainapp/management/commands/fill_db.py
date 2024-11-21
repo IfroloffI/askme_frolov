@@ -21,11 +21,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ratio = options['ratio']
 
-        # Удаляем существующие данные
-        models.Profile.objects.all().delete()
-        User.objects.all().delete()
+        # Удаляем существующие данные - проверяем вывод в консоли
+        deleted_profiles, _ = models.Profile.objects.all().delete()
+        deleted_users, _ = User.objects.all().delete()
+        self.stdout.write(f'Deleted {deleted_profiles} profiles and {deleted_users} users.')
 
-        # Генерация пользователей и профилей
+        # Генерация пользователей и их профилей
         users = []
         existing_usernames = set()
 
@@ -36,8 +37,7 @@ class Command(BaseCommand):
             password = 'password'
 
             user = User.objects.create_user(username=username, email=email, password=password)
-            profile = models.Profile.objects.create(user=user, nickname=f"Nickname_{i}")
-
+            # profile = models.Profile.objects.create(user=user, nickname=f"Nickname_{i}")
             users.append(user)
 
         # Генерация тегов
@@ -47,7 +47,7 @@ class Command(BaseCommand):
         questions = []
         for i in range(ratio * 10):
             user = random.choice(users)
-            profile = user.profile
+            profile = user.profile  # Теперь профиль существует
             question = models.Question.objects.create(
                 title=f'Question {i}',
                 content=f'Sample question content for question {i}',

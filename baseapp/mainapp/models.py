@@ -50,8 +50,8 @@ class Tag(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
+    nickname = models.CharField(max_length=30)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
     followers_count = models.PositiveIntegerField(default=0)
     objects = ProfileManager()
