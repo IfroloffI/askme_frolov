@@ -26,8 +26,6 @@ class ProfileManager(models.Manager):
             answer_count=Count('answer')
         ).order_by('-question_count', '-answer_count')[:5]
 
-        print("Popular users:", profiles)
-
         return profiles
 
     def get_user_profile(self, user):
@@ -36,7 +34,7 @@ class ProfileManager(models.Manager):
 
 class AnswerManager(models.Manager):
     def by_question(self, pk):
-        return self.filter(question=pk).order_by('-rating', 'created_at')
+        return self.filter(question=pk).order_by('-is_correct', '-rating', 'created_at')
 
 
 class Tag(models.Model):
@@ -96,6 +94,7 @@ class Answer(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+    is_correct = models.BooleanField(default=False)
 
     objects = AnswerManager()
 

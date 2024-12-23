@@ -23,6 +23,9 @@ class Command(BaseCommand):
 
         # Удаляем существующие данные - проверяем вывод в консоли
         deleted_profiles, _ = models.Profile.objects.all().delete()
+        deleted_tags = models.Tag.objects.all().delete()
+        deleted_questions = models.Question.objects.all().delete()
+
         deleted_users, _ = User.objects.all().delete()
         self.stdout.write(f'Deleted {deleted_profiles} profiles and {deleted_users} users.')
 
@@ -61,44 +64,5 @@ class Command(BaseCommand):
             question.tags.set(random.sample(tags, k=tags_cnt))
 
             questions.append(question)
-
-        # Генерация ответов и лайков на ответы
-        for i in range(ratio * 10):
-            random_user = random.choice(users)
-            random_profile = random_user.profile
-            random_question = random.choice(questions)
-
-            answer = models.Answer.objects.create(
-                profile=random_profile,
-                question=random_question,
-                content=f'Sample answer content for question {random_question.id}',
-                rating=random.randint(0, 50)
-            )
-
-            random_question.answer_count += 1
-            random_question.save()
-
-            # Генерация лайков на ответ
-            random_user = random.choice(users)
-            models.AnswerLike.objects.get_or_create(
-                answer=answer,
-                profile=random_user.profile,
-                is_like=random.choice([True, False])
-            )
-
-        # Генерация лайков на вопросы
-        for i in range(ratio * 200):
-            random_user = random.choice(users)
-            random_profile = random_user.profile
-            random_question = random.choice(questions)
-
-            models.QuestionLike.objects.get_or_create(
-                question=random_question,
-                profile=random_profile,
-                is_like=random.choice([True, False])
-            )
-
-            random_question.rating += 1 if random.choice([True, False]) else -1
-            random_question.save()
 
         self.stdout.write(self.style.SUCCESS('Database populated successfully'))

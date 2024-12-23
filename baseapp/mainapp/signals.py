@@ -9,7 +9,6 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     else:
-        # Обновление профиля, если пользователь уже существует
         if not hasattr(instance, 'profile'):
             Profile.objects.create(user=instance)
 

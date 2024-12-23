@@ -7,17 +7,28 @@
                     <img src="{{ question.profile.avatar.url }}" alt="Avatar"
                          class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
                     {% else %}
-                    <img src="../static/img/avatar.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2"
+                    <img src="../../static/img/avatar.png" alt="Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2"
                          style="width: 60px; height: 60px;">
                     {% endif %}
-                    <div class="d-flex align-items-center bg-light rounded p-2">
-                        <button class="btn btn-outline-success p-0 me-2" aria-label="Upvote">
-                            <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
-                        </button>
-                        <div class="ms-2 me-2">{{ question.rating }}</div>
-                        <button class="btn btn-outline-danger p-0" aria-label="Downvote">
-                            <i class="bi bi-arrow-down-circle-fill vote-icon"></i>
-                        </button>
+                    <h5 class="card-title mb-1">{{ question.profile.user.username }}</h5>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if user.is_authenticated %}
+                        <div class="d-flex align-items-center bg-light rounded p-2">
+                            <span class="like-button" aria-label="Like" data-voted="{{ user_vote }}"
+                                  data-question-id="{{ question.id }}">
+                                <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
+                            </span>
+                            <div class="ms-2 me-2" id="question-{{ question.id }}-rating" class="rating"
+                                 style="font-size: 24px;">{{ question.rating }}
+                            </div>
+                            <span class="dislike-button" aria-label="Dislike" data-voted="{{ user_vote }}"
+                                  data-question-id="{{ question.id }}">
+                                <i class="bi bi-arrow-down-circle-fill vote-icon"></i>
+                            </span>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

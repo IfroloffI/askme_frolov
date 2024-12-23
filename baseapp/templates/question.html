@@ -8,16 +8,14 @@ Question
 <div class="row mb-4">
     <div class="col-auto d-flex align-items-start">
         <div class="d-flex flex-column align-items-center">
-            <img src="../static/img/avatar.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2">
-            <div class="d-flex align-items-center bg-light rounded p-2">
-                <button class="btn btn-link p-0">
-                    <i class="bi bi-caret-up-fill vote-icon"></i>
-                </button>
-                <div class="ms-2 me-2">{{ question.rating }}</div>
-                <button class="btn btn-link p-0">
-                    <i class="bi bi-caret-down-fill vote-icon"></i>
-                </button>
-            </div>
+            {% if question.profile.avatar %}
+            <img src="{{ question.profile.avatar.url }}" alt="Avatar"
+                 class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+            {% else %}
+            <img src="../../static/img/avatar.png" alt="Avatar" class="img-thumbnail profilePictureQuestion mb-2"
+                 style="width: 60px; height: 60px;">
+            {% endif %}
+            <h5 class="card-title mb-1">{{ question.profile.user.username }}</h5>
         </div>
     </div>
     <div class="col">
@@ -51,11 +49,14 @@ Question
 {% include "components/pagination.html" %}
 
 <hr>
-
-<div class="form-group">
-    <textarea class="form-control mb-3" id="exampleFormControlTextarea1" rows="5"
-              placeholder="Write your answer here..."></textarea>
-    <button type="button" class="btn btn-primary w-100">Answer</button>
-</div>
-
+{% if user.is_authenticated %}
+<form method="POST" action="{% url 'add_answer' question.id %}">
+    {% csrf_token %}
+    <div class="form-group">
+        <textarea class="form-control mb-3" id="exampleFormControlTextarea1" name="content" rows="5"
+                  placeholder="Write your answer here..." required></textarea>
+        <button type="submit" class="btn btn-primary w-100">Answer</button>
+    </div>
+</form>
+{% endif %}
 {% endblock content %}

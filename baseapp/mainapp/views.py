@@ -4,13 +4,121 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import QuestionForm
 from django.contrib.auth import logout
 from .models import Profile, Tag, Question
 from django.contrib.auth.views import LoginView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Question, Answer, QuestionLike, AnswerLike
+
+
+@login_required
+def toggle_correct_answer(request, answer_id):
+    answer = get_object_or_404(Answer, id=answer_id)
+    question = answer.question
+
+    if request.user == question.user:
+        answer.is_correct = not answer.is_correct
+        answer.save()
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False}, status=403)
+
+
+@login_required
+def question_detail(request, question_id):
+    question = Question.objects.get(id=question_id)
+    user_vote = None
+    if QuestionLike.objects.filter(profile=request.user.profile, question=question).exists():
+        user_vote = QuestionLike.objects.get(profile=request.user.profile, question=question).is_like
+
+    return render(request, 'question_detail.html', {
+        'question': question,
+        'user_vote': user_vote,
+    })
+
+
+@login_required
+def vote_question(request, question_id):
+    question = Question.objects.get(id=question_id)
+    user = request.user
+    if QuestionLike.objects.filter(profile=user.profile, question=question).exists():
+        like = QuestionLike.objects.get(profile=user.profile, question=question)
+        if like.is_like:
+            like.delete()
+            question.rating -= 1
+        else:
+            like.is_like = True
+            like.save()
+            question.rating += 2
+    else:
+        QuestionLike.objects.create(profile=user.profile, question=question, is_like=True)
+        question.rating += 1
+    question.save()
+    return JsonResponse({'rating': question.rating, 'is_like': True})
+
+
+@login_required
+def downvote_question(request, question_id):
+    question = Question.objects.get(id=question_id)
+    user = request.user
+    if QuestionLike.objects.filter(profile=user.profile, question=question).exists():
+        like = QuestionLike.objects.get(profile=user.profile, question=question)
+        if not like.is_like:
+            like.delete()
+            question.rating += 1
+        else:
+            like.is_like = False
+            like.save()
+            question.rating -= 2
+    else:
+        QuestionLike.objects.create(profile=user.profile, question=question, is_like=False)
+        question.rating -= 1
+    question.save()
+    return JsonResponse({'rating': question.rating, 'is_like': False})
+
+
+@login_required
+def vote_answer(request, answer_id):
+    answer = Answer.objects.get(id=answer_id)
+    user = request.user
+    if AnswerLike.objects.filter(profile=user.profile, answer=answer).exists():
+        like = AnswerLike.objects.get(profile=user.profile, answer=answer)
+        if like.is_like:
+            like.delete()
+            answer.rating -= 1
+        else:
+            like.is_like = True
+            like.save()
+            answer.rating += 2
+    else:
+        AnswerLike.objects.create(profile=user.profile, answer=answer, is_like=True)
+        answer.rating += 1
+    answer.save()
+    return JsonResponse({'rating': answer.rating, 'is_like': True})
+
+
+@login_required
+def downvote_answer(request, answer_id):
+    answer = Answer.objects.get(id=answer_id)
+    user = request.user
+    if AnswerLike.objects.filter(profile=user.profile, answer=answer).exists():
+        like = AnswerLike.objects.get(profile=user.profile, answer=answer)
+        if not like.is_like:
+            like.delete()
+            answer.rating += 1
+        else:
+            like.is_like = False
+            like.save()
+            answer.rating -= 2
+    else:
+        AnswerLike.objects.create(profile=user.profile, answer=answer, is_like=False)
+        answer.rating -= 1
+    answer.save()
+    return JsonResponse({'rating': answer.rating, 'is_like': False})
 
 
 class CustomLoginView(LoginView):
@@ -64,9 +172,7 @@ def ask(request):
 
 def index(request):
     questions = Question.objects.all()
-    paginator = Paginator(questions, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginate(questions, request)
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
 
@@ -126,7 +232,7 @@ def register(request):
         except Exception as e:
             print(f"Error during user creation: {str(e)}")
             messages.error(request, f"An error occurred: {str(e)}")
-            return redirect('register')
+            return redirect('login')
 
     print("GET request or no POST data")
     return render(request, 'register.html', {
@@ -135,7 +241,7 @@ def register(request):
     })
 
 
-def paginate(objects_list, request, per_page=3, adjacent_pages=2):
+def paginate(objects_list, request, per_page=5, adjacent_pages=2):
     page_number = request.GET.get('page', 1)
     paginator = Paginator(objects_list, per_page)
     try:
@@ -161,12 +267,39 @@ def paginate(objects_list, request, per_page=3, adjacent_pages=2):
     }
 
 
+@login_required
+def add_answer(request, id_question):
+    if request.method == "POST":
+        content = request.POST.get('content')
+        question_item = get_object_or_404(Question, id=id_question)
+
+        answer = Answer.objects.create(profile=request.user.profile, question=question_item, content=content)
+
+        question_item.answer_count = question_item.answer_count + 1
+        question_item.save()
+
+        return redirect('question', id_question=id_question)
+
+    return redirect('login')
+
+
+@login_required
+def delete_answer(request, id_answer):
+    answer = get_object_or_404(Answer, id=id_answer)
+    question = answer.question
+
+    if request.method == "POST":
+        answer.delete()
+        question.answer_count = question.answer_count - 1
+        question.save()
+
+    return redirect('question', id_question=question.id)
+
+
 def question(request, id_question):
-    try:
-        question_item = Question.objects.get(id=id_question)
-    except Question.DoesNotExist:
-        messages.error(request, "Question not found")
-        return redirect('index')
+    question_item = get_object_or_404(Question, id=id_question)
+    question_item.answer_count = Answer.objects.filter(question=question_item).count()
+    question_item.save()
 
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
@@ -193,7 +326,7 @@ def tag(request, id_tag):
     popular_users = Profile.objects.popular_users()
     popular_tags = Tag.objects.popular_tags()
     questions = Question.objects.by_tag(tag)
-    content = paginate(questions, request)
+    content = paginate(questions, request, per_page=5)
 
     context = {
         'content': content,
@@ -252,7 +385,8 @@ def settings(request):
                   {'user': request.user, 'popular_tags': popular_tags,
                    'popular_users': popular_users,
                    'nickname': request.user.profile.nickname,
-                   'avatar': request.user.profile.avatar})
+                   'avatar': request.user.profile.avatar
+                   })
 
 
 def logout_view(request):

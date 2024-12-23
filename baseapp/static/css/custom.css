@@ -207,3 +207,49 @@ footer p {
     justify-content: space-between;
     align-items: center;
 }
+
+.correct-answer {
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 128, 0, 0.2);
+    background: linear-gradient(to bottom, #f9f9f9, #f2f2f2);
+}
+
+.correct-answer.card-body {
+    background-color: #f9f9f9;
+}
+
+.correct-answer.card-body:hover {
+    background-color: #f2f2f2;
+}
+
+.correct-answer.card-title {
+    color: #3e8e41;
+}
+
+.correct-answer.badge {
+    background-color: #3e8e41;
+}
+
+.like-button, .dislike-button {
+    font-size: 48px;
+    padding: 10px;
+    cursor: pointer;
+    color: #808080;
+    transition: color 0.3s;
+}
+
+.like-button:hover, .dislike-button:hover {
+    background-color: #f0f0f0!important;
+}
+
+.like-button.liked {
+    color: #007bff!important;
+}
+
+.dislike-button.disliked {
+    color: #dc3545!important;
+}
+
+.vote-icon {
+    font-size: 72px;
+}
