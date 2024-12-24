@@ -75,7 +75,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "baseapp.wsgi.application"
 
-CENTRIFUGO_URL = 'http://localhost:8000/api'
+# RABBITMQ_HOST = 'localhost'
+# RABBITMQ_QUEUE = 'question_updates'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

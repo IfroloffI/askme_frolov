@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Question, Answer, QuestionLike, AnswerLike
 from django.core.cache import cache
+from .rabbitmq import publish_message
 
 
 @login_required
@@ -294,10 +295,18 @@ def add_answer(request, id_question):
         question_item.answer_count = question_item.answer_count + 1
         question_item.save()
 
+        # publish_message({"event": "new_answer", "question_id": question_item.id, "answer_id": answer.id})
+
         return redirect('question', id_question=id_question)
 
     return redirect('login')
 
+
+def fetch_new_answers(request, question_id):
+    cache_key = f'answers_for_question_{question_id}'
+    answers = cache.get(cache_key, [])
+
+    return JsonResponse(answers, safe=False)
 
 @login_required
 def delete_answer(request, id_answer):

@@ -60,3 +60,58 @@ Question
 </form>
 {% endif %}
 {% endblock content %}
+
+<script>
+    function fetchNewAnswers(questionId) {
+        $.ajax({
+            url: `/question/${questionId}/new_answers/`,
+            success: function(data) {
+                const answersContainer = document.querySelector('#answers-container');
+
+                data.forEach(function(answer) {
+                    const existingAnswer = answersContainer.querySelector(`[data-answer-id="${answer.id}"]`);
+                    if (!existingAnswer) {
+                        const answerHtml = `
+                            <div class="card w-100 mb-3 ${answer.is_correct ? 'correct-answer' : ''}" data-answer-id="${answer.id}">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-auto d-flex align-items-center">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <img src="${answer.profile_avatar ? answer.profile_avatar : '../../static/img/avatar.png'}" alt="Avatar"
+                                                     class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                                            </div>
+                                        </div>
+                                       <div class="col">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h5 class="card-title mb-1">${answer.username}</h5>
+                                                ${answer.is_correct ? '<span class="badge bg-success">Correct Answer</span>' : '<span class="badge">Correct Answer</span>'}
+                                                <input type="checkbox" ${answer.is_correct ? 'checked' : ''} data-answer-id="${answer.id}" onchange="toggleCorrectAnswer(${answer.id})"/>
+                                                <div class="d-flex align-items-center bg-light rounded p-2">
+                                                    <button class="btn btn-link upvote-button" aria-label="Upvote"
+                                                            onclick="voteAnswer(${answer.id}, true)">
+                                                        <i class="bi bi-chevron-up vote-icon"></i>
+                                                    </button>
+                                                    <div class="ms-2 me-2" id="answer-${answer.id}-rating">${answer.rating}</div>
+                                                    <button class="btn btn-link downvote-button" aria-label="Downvote"
+                                                            onclick="voteAnswer(${answer.id}, false)">
+                                                        <i class="bi bi-chevron-down vote-icon"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <p class="card-text">${answer.content}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+
+                        answersContainer.innerHTML += answerHtml;
+                    }
+                });
+            }
+        });
+    }
+
+    setInterval(function() {
+        fetchNewAnswers({{ question.id }});
+    }, 3000);
+</script>

@@ -23,4 +23,5 @@ urlpatterns = [
                   path('answer/<int:answer_id>/toggle_correct/', views.toggle_correct_answer,
                        name='toggle_correct_answer'),
                   path('search/', views.search_questions, name='search_questions'),
+                  path('question/<int:question_id>/new_answers/', views.fetch_new_answers, name='fetch_new_answers'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
