@@ -295,7 +295,7 @@ def add_answer(request, id_question):
         question_item.answer_count = question_item.answer_count + 1
         question_item.save()
 
-        # publish_message({"event": "new_answer", "question_id": question_item.id, "answer_id": answer.id})
+        publish_message({"event": "new_answer", "question_id": question_item.id, "answer_id": answer.id})
 
         return redirect('question', id_question=id_question)
 
