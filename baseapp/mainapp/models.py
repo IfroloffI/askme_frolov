@@ -15,6 +15,9 @@ class QuestionManager(models.Manager):
     def hot(self):
         return self.order_by('-rating', '-created_at')
 
+    def search(self, query):
+        return self.filter(Q(title__icontains=query) | Q(content__icontains=query)).order_by('-created_at')
+
 
 class TagManager(models.Manager):
     def popular_tags(self):
@@ -65,8 +68,8 @@ class Profile(models.Model):
 class Question(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')
-    title = models.CharField(max_length=255)
-    content = models.TextField()
+    title = models.CharField(max_length=255, db_index=True)  # Индекс для полнотекстового поиска
+    content = models.TextField(db_index=True)  # Индекс для полнотекстового поиска
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag)
     rating = models.IntegerField(default=0)

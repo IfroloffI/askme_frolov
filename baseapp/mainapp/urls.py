@@ -22,4 +22,5 @@ urlpatterns = [
                   path('vote/answer/<int:answer_id>/down/', views.downvote_answer, name='vote_answer_down'),
                   path('answer/<int:answer_id>/toggle_correct/', views.toggle_correct_answer,
                        name='toggle_correct_answer'),
+                  path('search/', views.search_questions, name='search_questions'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -253,3 +253,25 @@ footer p {
 .vote-icon {
     font-size: 72px;
 }
+
+#search-results {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 110px;
+    right: 10px;
+    z-index: 1000;
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    cursor: pointer;
+}
+
+.list-group-item:hover {
+    background-color: #0056b3;
+}
+

@@ -1,5 +1,23 @@
+# Быстрый старт на Windows:
+0. Создать в директории A:\PycharmProjects\askme_frolov\baseapp\nginx папки:
+    - cache
+    - logs
+    - temp
+1. Из директории A:\PycharmProjects\askme_frolov\baseapp\nginx запустить NginX по аналогии с данным запуском (с использованием конфига):
+```bash
+C:\tools\nginx-1.27.3\nginx -c A:\PycharmProjects\askme_frolov\baseapp\nginx\conf\nginx.conf
+```
+2. В директории A:\PycharmProjects\askme_frolov\baseapp запустить:
+```bash
+python simple_wsgi.py
+ ```
+3. В директории A:\PycharmProjects\askme_frolov\baseapp запустить:
+```bash
+python manage.py runserver
+```
+4. Пользоваться: localhost:80/
+    (localhost:8000 - Django сервер, localhost:8081 - Waitress WSGI)
 ## ДЗ № 1
-
 - [ + ] Верстка общего вида страницы
 - [ + ] Верстка списка вопросов на главной странице (index)
 - [ + ] Верстка страницы одного вопроса (question)
@@ -53,4 +71,4 @@
 - [ ] Real-time сообщения
 - [ + ] Блок популярные теги
 - [ + ] Блок лучшие пользователи
-- [ ] Поиск по заголовку и содержимому вопроса
+- [ + ] Поиск по заголовку и содержимому вопроса

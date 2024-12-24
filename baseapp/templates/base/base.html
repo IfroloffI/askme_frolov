@@ -26,8 +26,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="d-flex w-100 justify-content-between align-items-center">
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Type question" aria-label="search">
+                    <form class="d-flex" id="search-form" onsubmit="return handleSearch(event);">
+                        <input class="form-control me-2" type="search" id="search-input" placeholder="Type question"
+                               aria-label="search">
                         <button class="btn btn-outline-primary" type="submit">Search</button>
                     </form>
                     <ul class="navbar-nav d-flex align-items-center">
@@ -41,6 +42,7 @@
             </div>
         </div>
     </nav>
+    <ul id="search-results" class="list-group position-fixed"></ul>
 </header>
 
 
@@ -102,14 +104,12 @@
     document.addEventListener('DOMContentLoaded', (event) => {
         const likeButtons = document.querySelectorAll('.like-button');
         const dislikeButtons = document.querySelectorAll('.dislike-button');
-
         likeButtons.forEach(button => {
             button.onclick = function() {
                 const questionId = this.getAttribute('data-question-id');
                 voteQuestion(questionId, true);
             };
         });
-
         dislikeButtons.forEach(button => {
             button.onclick = function() {
                 const questionId = this.getAttribute('data-question-id');
@@ -121,14 +121,15 @@
     function voteQuestion(questionId, isLike) {
         const action = isLike ? 'up' : 'down';
         const url = `/vote/question/${questionId}/${action}/`;
-
         fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: JSON.stringify({ action })
+            body: JSON.stringify({
+                action
+            })
         }).then(response => {
             if (response.ok) {
                 return response.json();
@@ -139,10 +140,8 @@
             if (data) {
                 const ratingElement = document.querySelector(`#question-${questionId}-rating`);
                 ratingElement.textContent = data.rating;
-
                 const likeButton = document.querySelector(`.like-button[data-question-id="${questionId}"]`);
                 const dislikeButton = document.querySelector(`.dislike-button[data-question-id="${questionId}"]`);
-
                 if (data.is_like) {
                     likeButton.classList.add('liked');
                     dislikeButton.classList.remove('disliked');
@@ -155,70 +154,105 @@
     }
 
     function voteAnswer(answerId, isLike) {
-                    fetch(`/vote/answer/${answerId}/${isLike? 'up' : 'down'}/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            alert('Ошибка при голосовании.');
-                        }
-                    }).then(data => {
-                        const ratingElement = document.querySelector(`#answer-${answerId}-rating`);
-                        ratingElement.textContent = data.rating;
+        fetch(`/vote/answer/${answerId}/${isLike? 'up' : 'down'}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                alert('Ошибка при голосовании.');
+            }
+        }).then(data => {
+            const ratingElement = document.querySelector(`#answer-${answerId}-rating`);
+            ratingElement.textContent = data.rating;
+            const upvoteButton = document.querySelector(`.upvote-button[onclick="voteAnswer(${answerId}, true)"]`);
+            const downvoteButton = document.querySelector(`.downvote-button[onclick="voteAnswer(${answerId}, false)"]`);
+            if (isLike) {
+                upvoteButton.classList.add('upvoted');
+                downvoteButton.classList.remove('downvoted');
+            } else {
+                downvoteButton.classList.add('downvoted');
+                upvoteButton.classList.remove('upvoted');
+            }
+        });
+        location.reload();
+    }
 
-                        const upvoteButton = document.querySelector(`.upvote-button[onclick="voteAnswer(${answerId}, true)"]`);
-                        const downvoteButton = document.querySelector(`.downvote-button[onclick="voteAnswer(${answerId}, false)"]`);
-
-                        if (isLike) {
-                            upvoteButton.classList.add('upvoted');
-                            downvoteButton.classList.remove('downvoted');
-                        } else {
-                            downvoteButton.classList.add('downvoted');
-                            upvoteButton.classList.remove('upvoted');
-                        }
+    function toggleCorrectAnswer(answerId) {
+        const checkbox = document.querySelector(`input[type="checkbox"][data-answer-id="${answerId}"]`);
+        const currentCheckedState = checkbox.checked;
+        console.log(`Запрос для ответа ID: ${answerId}. Текущее состояние: ${currentCheckedState}`);
+        fetch(`/answer/${answerId}/toggle_correct/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                console.error("Ошибка: Неверный ответ от сервера.", response.status);
+                throw new Error('Ошибка при изменении состояния');
+            }
+        }).then(data => {
+            if (data.success) {
+                checkbox.checked = !currentCheckedState;
+                const message = checkbox.checked ? 'Отмечено как правильный ответ' : 'Снято с отметки правильного ответа';
+                console.log(message);
+            } else {
+                alert("Вы не имеете прав на изменение этого значения.");
+            }
+        }).catch(err => {
+            console.error("Ошибка:", err);
+            alert("Произошла ошибка. Пожалуйста, попробуйте снова.");
+            checkbox.checked = currentCheckedState;
+        });
+        location.reload();
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const resultsList = document.getElementById('search-results');
+        let timeout = null;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const query = this.value;
+            if (query.length >= 2) {
+                timeout = setTimeout(() => {
+                    fetch(`/search/?q=${encodeURIComponent(query)}`).then(response => response.json()).then(data => {
+                        resultsList.innerHTML = '';
+                        data.forEach(question => {
+                            const li = document.createElement('li');
+                            li.className = 'list-group-item';
+                            li.textContent = question.title;
+                            li.dataset.id = question.id;
+                            li.addEventListener('click', function() {
+                                window.location.href = `/question/${question.id}/`;
+                            });
+                            resultsList.appendChild(li);
+                        });
                     });
-                    location.reload();
-        }
-
-function toggleCorrectAnswer(answerId) {
-    const checkbox = document.querySelector(`input[type="checkbox"][data-answer-id="${answerId}"]`);
-    const currentCheckedState = checkbox.checked;
-
-    console.log(`Запрос для ответа ID: ${answerId}. Текущее состояние: ${currentCheckedState}`);
-
-    fetch(`/answer/${answerId}/toggle_correct/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        }
-    }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            console.error("Ошибка: Неверный ответ от сервера.", response.status);
-            throw new Error('Ошибка при изменении состояния');
-        }
-    }).then(data => {
-        if (data.success) {
-            checkbox.checked = !currentCheckedState;
-            const message = checkbox.checked ? 'Отмечено как правильный ответ' : 'Снято с отметки правильного ответа';
-            console.log(message);
-        } else {
-            alert("Вы не имеете прав на изменение этого значения.");
-        }
-    }).catch(err => {
-        console.error("Ошибка:", err);
-        alert("Произошла ошибка. Пожалуйста, попробуйте снова.");
-        checkbox.checked = currentCheckedState;
+                }, 300);
+            } else {
+                resultsList.innerHTML = '';
+            }
+        });
     });
-    location.reload();
-}
+
+    function handleSearch(event) {
+        event.preventDefault();
+        const firstResult = document.querySelector('#search-results .list-group-item');
+        if (firstResult) {
+            window.location.href = `/question/${firstResult.dataset.id}/`;
+        } else {
+            window.location.href = "/";
+        }
+    }
+
 </script>
 
 </body>

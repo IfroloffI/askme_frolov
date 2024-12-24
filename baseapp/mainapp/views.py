@@ -4,6 +4,7 @@ from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.contrib import messages
+from django.db.models import Q
 from .forms import QuestionForm
 from django.contrib.auth import logout
 from .models import Profile, Tag, Question
@@ -407,3 +408,12 @@ def settings(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+
+def search_questions(request):
+    query = request.GET.get('q', '')
+    if query:
+        results = Question.objects.filter(Q(title__icontains=query) | Q(content__icontains=query))[:10]
+        results_data = [{'title': question.title, 'id': question.id} for question in results]
+        return JsonResponse(results_data, safe=False)
+    return JsonResponse([], safe=False)
