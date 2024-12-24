@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Count
+from django.utils import timezone
+from django.db.models import Count, Q
+from datetime import timedelta
 
 
 class QuestionManager(models.Manager):
@@ -16,17 +18,19 @@ class QuestionManager(models.Manager):
 
 class TagManager(models.Manager):
     def popular_tags(self):
-        return self.all().order_by('-rating')[:10]
+        three_months_ago = timezone.now() - timedelta(days=90)
+        return self.annotate(
+            question_count=Count('question', filter=Q(question__created_at__gte=three_months_ago))
+        ).order_by('-question_count')[:10]
 
 
 class ProfileManager(models.Manager):
     def popular_users(self):
-        profiles = self.annotate(
-            question_count=Count('question'),
-            answer_count=Count('answer')
-        ).order_by('-question_count', '-answer_count')[:5]
-
-        return profiles
+        one_week_ago = timezone.now() - timedelta(days=7)
+        return self.annotate(
+            question_count=Count('question', filter=Q(question__created_at__gte=one_week_ago)),
+            answer_count=Count('answer', filter=Q(answer__created_at__gte=one_week_ago))
+        ).order_by('-question_count', '-answer_count')[:10]
 
     def get_user_profile(self, user):
         return self.get(user=user)
@@ -59,8 +63,8 @@ class Profile(models.Model):
 
 
 class Question(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Пользователь
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')  # Профиль
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='Author')
     title = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

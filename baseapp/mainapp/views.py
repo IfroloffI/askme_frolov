@@ -12,6 +12,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Question, Answer, QuestionLike, AnswerLike
+from django.core.cache import cache
 
 
 @login_required
@@ -120,13 +121,28 @@ def downvote_answer(request, answer_id):
     return JsonResponse({'rating': answer.rating, 'is_like': False})
 
 
+def get_popular_users():
+    return cache.get('popular_users', None)
+
+
+def get_popular_tags():
+    return cache.get('popular_tags', None)
+
+
 class CustomLoginView(LoginView):
     template_name = 'login.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        popular_users = Profile.objects.popular_users()
-        popular_tags = Tag.objects.popular_tags()
+
+        popular_users = get_popular_users()
+        popular_tags = get_popular_tags()
+
+        if popular_users is None or popular_tags is None:
+            popular_users = Profile.objects.popular_users()
+            popular_tags = Tag.objects.popular_tags()
+            cache.set('popular_users', popular_users, timeout=60 * 5)
+            cache.set('popular_tags', popular_tags, timeout=60 * 5)
 
         context['popular_users'] = popular_users
         context['popular_tags'] = popular_tags

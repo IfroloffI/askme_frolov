@@ -21,10 +21,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ratio = options['ratio']
 
-        # Удаляем существующие данные - проверяем вывод в консоли
+        # Удаляем существующие данные
         deleted_profiles, _ = models.Profile.objects.all().delete()
-        deleted_tags = models.Tag.objects.all().delete()
-        deleted_questions = models.Question.objects.all().delete()
+        deleted_tags, _ = models.Tag.objects.all().delete()
+        deleted_questions, _ = models.Question.objects.all().delete()
 
         deleted_users, _ = User.objects.all().delete()
         self.stdout.write(f'Deleted {deleted_profiles} profiles and {deleted_users} users.')
