@@ -175,7 +175,7 @@ def ask(request):
                 tag, created = Tag.objects.get_or_create(tag=tag_name)
                 question.tags.add(tag)
 
-            return redirect('home')
+            return redirect('index')
 
     else:
         form = QuestionForm()
@@ -242,7 +242,7 @@ def register(request):
             login(request, user)
             print(f"User {username} logged in successfully")
 
-            return redirect('home')
+            return redirect('index')
 
         except Exception as e:
             print(f"Error during user creation: {str(e)}")
