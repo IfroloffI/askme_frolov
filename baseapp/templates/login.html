@@ -1,0 +1,46 @@
+{% extends "./base/base.html" %}
+
+{% block title %}
+Log In
+{% endblock title %}
+
+{% block content %}
+<div class="d-flex gap-3 align-items-center mb-4">
+    <h1>Log In</h1>
+</div>
+
+{% include "components/error.html" %}
+
+
+<form method="post">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <label for="login" class="col-sm-2 col-form-label">Login</label>
+        <div class="col-sm-4">
+            <input type="text" id="login" name="username" class="form-control" placeholder="Enter your login here"
+                   required/>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-4">
+            <input type="password" id="password" name="password" class="form-control"
+                   placeholder="Enter your password here" required/>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-2"></div>
+        <div class="col-10">
+            <button type="submit" class="btn btn-primary w-100">Log In</button>
+        </div>
+    </div>
+</form>
+
+<div class="row mt-3">
+    <div class="col-12 text-center">
+        <a href="{% url 'register' %}" class="text-decoration-none">Create a new account</a>
+    </div>
+</div>
+{% endblock content %}

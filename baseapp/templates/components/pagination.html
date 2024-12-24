@@ -1,0 +1,37 @@
+<nav aria-label="Pagination" class="mt-3">
+    {% if content.total_pages > 1 %}
+    <ul class="pagination pagination-rounded justify-content-center">
+        {% if content.page_number > 1 %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1" aria-label="First">
+                <span aria-hidden="true">First</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ content.page_number|add:-1 }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% for page in content.rang %}
+        <li class="page-item {% if page == content.page_number %}active{% endif %}">
+            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+        </li>
+        {% endfor %}
+
+        {% if content.page_number < content.total_pages %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ content.page_number|add:1 }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ content.total_pages }}" aria-label="Last">
+                <span aria-hidden="true">Last</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+</nav>

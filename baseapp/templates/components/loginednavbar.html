@@ -1,0 +1,20 @@
+<li class="nav-item me-2">
+    <a href="{% url 'ask' %}" class="btn btn-primary">Ask</a>
+</li>
+<div class="d-flex align-items-center w-100">
+    {% if user.profile.avatar %}
+    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="rounded-circle profileAvatar me-2">
+    {% else %}
+    <img src="../static/img/avatar.png" alt="Avatar" class="rounded-circle profileAvatar me-2">
+    {% endif %}
+
+    <div class="d-flex flex-column me-auto profile-username">
+        <div class="fw-bold">{{ user.username }}</div>
+    </div>
+
+    <div class="d-flex flex-row align-items-center gap-3 profile-buttons">
+        <a href="{% url 'settings' %}" class="btn btn-outline-secondary">Settings</a>
+        <a href="{% url 'logout' %}" class="btn btn-outline-danger">Exit</a>
+    </div>
+</div>
+</li>

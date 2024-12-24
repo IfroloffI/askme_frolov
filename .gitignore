@@ -2,6 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
+media/
+
+# NginX
+temp/
+logs/
+cache/
 
 # C extensions
 *.so

@@ -1,0 +1,64 @@
+<div class="card w-100 mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-start">
+                <div class="d-flex flex-column align-items-center">
+                    {% if question.profile.avatar %}
+                    <img src="{{ question.profile.avatar.url }}" alt="Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                    {% else %}
+                    <img src="../../static/img/avatar.png" alt="Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2"
+                         style="width: 60px; height: 60px;">
+                    {% endif %}
+                    <h5 class="card-title mb-1">{{ question.profile.user.username }}</h5>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        {% if user.is_authenticated %}
+                        <div class="d-flex align-items-center bg-light rounded p-2">
+                            <button class="like-button" aria-label="Like" data-voted="{{ user_vote }}"
+                                  data-question-id="{{ question.id }}">
+                                <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
+                            </button>
+                            <div class="ms-2 me-2" id="question-{{ question.id }}-rating" class="rating"
+                                 style="font-size: 24px;">{{ question.rating }}
+                            </div>
+                            <button class="dislike-button" aria-label="Dislike" data-voted="{{ user_vote }}"
+                                  data-question-id="{{ question.id }}">
+                                <i class="bi bi-arrow-down-circle-fill vote-icon"></i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h5 class="card-title">
+                    <a class="text-decoration-none text-reset" href="{% url 'question' question.id %}">
+                        {{ question.title }}
+                    </a>
+                </h5>
+                <div class="textboxQuestion">
+                    <p class="card-text cardoverflow">
+                        {{ question.content }}
+                    </p>
+                </div>
+                <div class="d-flex gap-5">
+                    <a href="{% url 'question' question.id %}#end" class="card-link btn btn-outline-primary">
+                        Answer ({{ question.answer_count }})
+                    </a>
+                    <div>
+                        <span>Tags:</span>
+                        {% for tag in question.tags.all %}
+                        <span class="badge rounded-pill text-bg-primary">
+                            <a class="text-decoration-none text-reset" href="{% url 'tag' tag.id %}">
+                                {{ tag.tag }}
+                            </a>
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

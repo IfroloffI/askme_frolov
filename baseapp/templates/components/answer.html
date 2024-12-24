@@ -1,0 +1,50 @@
+<div class="card w-100 mb-3 {% if answer.is_correct %}correct-answer{% endif %}">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto d-flex align-items-center">
+                <div class="d-flex flex-column align-items-center">
+                    {% if answer.profile.avatar %}
+                    <img src="{{ answer.profile.avatar.url }}" alt="Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                    {% else %}
+                    <img src="../../static/img/avatar.png" alt="Default Avatar"
+                         class="img-thumbnail profilePictureQuestion mb-2" style="width: 60px; height: 60px;">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-1">{{ answer.profile.user.username }}</h5>
+
+                    {% if answer.is_correct %}
+                    <span class="badge bg-success">Correct Answer</span>
+                    {% else %}
+                    <span class="badge">Correct Answer</span>
+                    {% endif %}
+
+                    {% if question.user == request.user %}
+                    <input type="checkbox" {% if answer.is_correct %} checked {% endif %} data-answer-id="{{ answer.id }}"
+                           onchange="toggleCorrectAnswer({{ answer.id }})"/>
+                    {% endif %}
+
+
+                    {% if user.is_authenticated %}
+                    <div class="d-flex align-items-center bg-light rounded p-2">
+                        <button class="btn btn-link upvote-button" aria-label="Upvote"
+                                onclick="voteAnswer({{ answer.id }}, true)">
+                            <i class="bi bi-chevron-up vote-icon"></i>
+                        </button>
+                        <div class="ms-2 me-2" id="answer-{{ answer.id }}-rating">{{ answer.rating }}</div>
+                        <button class="btn btn-link downvote-button" aria-label="Downvote"
+                                onclick="voteAnswer({{ answer.id }}, false)">
+                            <i class="bi bi-chevron-down vote-icon"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <p class="card-text">{{ answer.content }}</p>
+            </div>
+        </div>
+    </div>
+</div>
