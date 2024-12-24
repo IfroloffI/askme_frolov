@@ -1,5 +1,4 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Profile, Question, Answer, Tag, QuestionLike, AnswerLike
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.core.exceptions import ValidationError
