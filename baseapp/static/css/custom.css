@@ -230,7 +230,7 @@ footer p {
     background-color: #3e8e41;
 }
 
-.like-button, .dislike-button {
+button.like-button, button.dislike-button {
     font-size: 48px;
     padding: 10px;
     cursor: pointer;
@@ -238,40 +238,42 @@ footer p {
     transition: color 0.3s;
 }
 
-.like-button:hover, .dislike-button:hover {
+button.like-button:hover, button.dislike-button:hover {
     background-color: #f0f0f0!important;
 }
 
-.like-button.liked {
+button.like-button.liked {
     color: #007bff!important;
 }
 
-.dislike-button.disliked {
+button.dislike-button.disliked {
     color: #dc3545!important;
 }
 
 .vote-icon {
     font-size: 72px;
+    color: inherit;
 }
 
 #search-results {
-    display: none;
-    position: fixed;
-    top: 60px;
-    left: 110px;
-    right: 10px;
-    z-index: 1000;
-    background-color: white;
-    border: 1px solid #ccc;
-    max-height: 200px;
-    overflow-y: auto;
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: white;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .list-group-item {
-    cursor: pointer;
+      cursor: pointer;
 }
 
 .list-group-item:hover {
-    background-color: #0056b3;
+      background-color: #f0f0f0;
 }
 

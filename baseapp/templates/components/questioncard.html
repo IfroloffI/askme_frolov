@@ -16,17 +16,17 @@
                     <div class="d-flex justify-content-between align-items-center">
                         {% if user.is_authenticated %}
                         <div class="d-flex align-items-center bg-light rounded p-2">
-                            <span class="like-button" aria-label="Like" data-voted="{{ user_vote }}"
+                            <button class="like-button" aria-label="Like" data-voted="{{ user_vote }}"
                                   data-question-id="{{ question.id }}">
                                 <i class="bi bi-arrow-up-circle-fill vote-icon"></i>
-                            </span>
+                            </button>
                             <div class="ms-2 me-2" id="question-{{ question.id }}-rating" class="rating"
                                  style="font-size: 24px;">{{ question.rating }}
                             </div>
-                            <span class="dislike-button" aria-label="Dislike" data-voted="{{ user_vote }}"
+                            <button class="dislike-button" aria-label="Dislike" data-voted="{{ user_vote }}"
                                   data-question-id="{{ question.id }}">
                                 <i class="bi bi-arrow-down-circle-fill vote-icon"></i>
-                            </span>
+                            </button>
                         </div>
                         {% endif %}
                     </div>

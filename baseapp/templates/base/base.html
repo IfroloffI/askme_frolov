@@ -29,7 +29,7 @@
                     <form class="d-flex" id="search-form" onsubmit="return handleSearch(event);">
                         <input class="form-control me-2" type="search" id="search-input" placeholder="Type question"
                                aria-label="search">
-                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                        <button class="btn btn-outline-primary" type="submit">Open</button>
                     </form>
                     <ul class="navbar-nav d-flex align-items-center">
                         {% if user.is_authenticated %}
@@ -42,7 +42,7 @@
             </div>
         </div>
     </nav>
-    <ul id="search-results" class="list-group position-fixed"></ul>
+    <ul id="search-results" class="list-group"></ul>
 </header>
 
 
