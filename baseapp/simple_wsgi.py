@@ -20,6 +20,7 @@ def simple_application(environ, start_response):
     response_body = f"GET Parameters: {get_params}\nPOST Parameters: {post_params}"
     return [response_body.encode('utf-8')]
 
+
 # ?хз, мб: python -m waitress --host=0.0.0.0 --port=8081 main_application:application
 def main_application():
     sys.path.append('A:/PycharmProjects/askme_frolov/baseapp')
