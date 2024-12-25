@@ -23,6 +23,7 @@ def toggle_correct_answer(request, answer_id):
     question = answer.question
 
     if request.user == question.user:
+        Answer.objects.filter(question=question, is_correct=True).update(is_correct=False)
         answer.is_correct = not answer.is_correct
         answer.save()
         return JsonResponse({'success': True})
@@ -307,6 +308,7 @@ def fetch_new_answers(request, question_id):
     answers = cache.get(cache_key, [])
 
     return JsonResponse(answers, safe=False)
+
 
 @login_required
 def delete_answer(request, id_answer):

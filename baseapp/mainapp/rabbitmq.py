@@ -2,6 +2,7 @@ import pika
 import json
 from django.conf import settings
 
+
 def publish_message(message):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
     channel = connection.channel()
@@ -11,6 +12,7 @@ def publish_message(message):
                           routing_key=settings.RABBITMQ_QUEUE,
                           body=json.dumps(message))
     connection.close()
+
 
 def consume_messages(callback):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
