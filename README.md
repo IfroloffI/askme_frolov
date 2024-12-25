@@ -11,12 +11,18 @@ C:\tools\nginx-1.27.3\nginx -c A:\PycharmProjects\askme_frolov\baseapp\nginx\con
 ```bash
 python simple_wsgi.py
  ```
-3. В директории A:\PycharmProjects\askme_frolov\baseapp запустить:
+Для запуска без балансировщика:
+3*. В директории A:\PycharmProjects\askme_frolov\baseapp запустить:
 ```bash
 python manage.py runserver
 ```
-4. Пользоваться: localhost:80/
-    (localhost:8000 - Django сервер, localhost:8081 - Waitress WSGI)
+4. В директории A:\PycharmProjects\askme_frolov\baseapp запустить
+(Брокер сообщений RabitMQ):
+```bash
+python run_consumer.py
+```
+5. Пользоваться с WSGI: localhost:80 (localhost:8081 - Waitress WSGI)
+  Django-сервер: localhost:8000
 ## ДЗ № 1
 - [ + ] Верстка общего вида страницы
 - [ + ] Верстка списка вопросов на главной странице (index)
