@@ -21,8 +21,8 @@ python manage.py runserver
 ```bash
 python run_consumer.py
 ```
-5. Пользоваться с WSGI: localhost:80 (localhost:8081 - Waitress WSGI)
-  Django-сервер: localhost:8000
+5. - Пользоваться с WSGI: localhost:80 (localhost:8081 - Waitress WSGI)
+   - Django-сервер: localhost:8000
 ## ДЗ № 1
 - [ + ] Верстка общего вида страницы
 - [ + ] Верстка списка вопросов на главной странице (index)
